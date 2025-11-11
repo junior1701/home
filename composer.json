@@ -4,7 +4,7 @@
         "psr-4": {
             "app\\": "app/"
         }
-    },
+    }, 
     "authors": [
         {
             "name": "junior"

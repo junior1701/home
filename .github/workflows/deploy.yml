@@ -1,18 +1,14 @@
 name: "Deploy para VPS"
-
-on: 
+on:
   push:
-    branches:
+    branches: 
       - main
-
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: "Baixar o código"
+      - name: "Baixar o código" 
         uses: actions/checkout@v4
-
       - name: "Copiar arquivos para VPS"
         uses: appleboy/scp-action@v1
         with:
@@ -21,7 +17,7 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           source: "."
           target: "/home/junior"
-
+        
       - name: "Build da aplicação"
         uses: appleboy/ssh-action@v1
         with:
@@ -31,4 +27,4 @@ jobs:
           script: |
             cd /home/junior
             composer install --no-dev --no-progress -a
-            chown -R www-data:www-data.
+            chown -R www-data:www-data .

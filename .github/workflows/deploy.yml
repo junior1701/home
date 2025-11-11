@@ -26,5 +26,7 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
             cd /home/junior
-            composer install --no-dev --no-progress -a
+            sudo dos2unix deploy.sh
+            sudo chmod +x deploy.sh
+            sudo bash deploy.sh
             chown -R www-data:www-data .

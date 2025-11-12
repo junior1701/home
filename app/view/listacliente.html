@@ -1,0 +1,62 @@
+{% extends "main.html" %}
+
+{% block main %}
+<div class="container mt-5">
+  <div class="card shadow-lg" style="background-color:#121212; color:#fff; border:none;">
+    <div class="card-header" style="background-color:#1f1f1f; border-bottom:1px solid #333;">
+      <h2><i class="fa-regular fa-user"></i> Usuários Cadastrados</h2>
+    </div>
+    <div class="card-body">
+      <div class="mb-3">
+        <a href="/usuario/cadastro" class="btn btn-success">
+          <i class="fa-solid fa-user-plus"></i> Novo Usuário
+        </a>
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <div class="form-floating">
+          <input type="search" class="form-control bg-dark text-light border-light" id="pesquisa" name="pesquisa" placeholder="Pesquisar">
+          <label for="pesquisa"><i class="fa-solid fa-magnifying-glass"></i> Digite o Nome</label>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-hover text-light" style="background-color:#1f1f1f;">
+          <thead style="background-color:#2c2c2c;">
+            <tr>
+              <th><i class="fa-solid fa-fingerprint"></i> Código</th>
+              <th><i class="fa-solid fa-user"></i> Nome</th>
+              <th><i class="fa-solid fa-user"></i> Sobrenome</th>
+              <th><i class="fa-solid fa-id-card"></i> CPF</th>
+              <th><i class="fa-solid fa-id-card"></i> RG</th>
+            </tr>
+          </thead>
+          <tbody id="listacliente">
+            <tr>
+              <td>001</td>
+              <td>Lucas</td>
+              <td>Silva</td>
+              <td>123.456.789-00</td>
+              <td>12.345.678-9</td>
+            </tr>
+            <tr>
+              <td>002</td>
+              <td>Mariana</td>
+              <td>Souza</td>
+              <td>987.654.321-00</td>
+              <td>98.765.432-1</td>
+            </tr>
+            <tr>
+              <td>003</td>
+              <td>Felipe</td>
+              <td>Almeida</td>
+              <td>456.789.123-00</td>
+              <td>45.678.912-3</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

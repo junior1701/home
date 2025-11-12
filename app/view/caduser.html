@@ -2,79 +2,82 @@
 
 {% block main %}
 <div class="container mt-5">
-    <h1 class="mb-4"><i class="fa-solid fa-user-plus"></i> Cadastro de Usuário</h1>
-
-    <form id="form" method="post" action="/usuario/salvar">
+  <div class="card">
+    <div class="card-header">
+      <h2><i class="fa-solid fa-user-plus"></i> Cadastro de Usuário</h2>
+    </div>
+    <div class="card-body">
+      <form id="form" method="post" action="/usuario/salvar">
         <div class="row">
-            <div class="col-md-6 mt-3">
-                <div class="form-floating mb-3">
-                    <input type="text" class="form-control fs" id="nome" name="nome" placeholder="Nome" required>
-                    <label for="nome"><i class="fa-solid fa-user"></i> Nome</label>
-                </div>
+          <div class="col-md-6 mt-3">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="nome" name="nome" placeholder="Nome" required>
+              <label for="nome"><i class="fa-solid fa-user"></i> Nome</label>
             </div>
+          </div>
 
-            <div class="col-md-6 mt-3">
-                <div class="form-floating mb-3">
-                    <input type="text" class="form-control fs" id="sobrenome" name="sobrenome" placeholder="Sobrenome" required>
-                    <label for="sobrenome"><i class="fa-solid fa-user"></i> Sobrenome</label>
-                </div>
+          <div class="col-md-6 mt-3">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="sobrenome" name="sobrenome" placeholder="Sobrenome" required>
+              <label for="sobrenome"><i class="fa-solid fa-user"></i> Sobrenome</label>
             </div>
+          </div>
 
-            <div class="col-md-6 mt-3">
-                <div class="form-floating mb-3">
-                    <input type="email" class="form-control fs" id="email" name="email" placeholder="Email" required>
-                    <label for="email"><i class="fa-solid fa-envelope"></i> E-mail</label>
-                </div>
+          <div class="col-md-6 mt-3">
+            <div class="form-floating">
+              <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
+              <label for="email"><i class="fa-solid fa-envelope"></i> E-mail</label>
             </div>
+          </div>
 
-            <div class="col-md-6 mt-3">
-                <div class="form-floating mb-3">
-                    <input type="password" class="form-control fs" id="senha" name="senha" placeholder="Senha" required>
-                    <label for="senha"><i class="fa-solid fa-lock"></i> Senha</label>
-                </div>
+          <div class="col-md-6 mt-3">
+            <div class="form-floating">
+              <input type="password" class="form-control" id="senha" name="senha" placeholder="Senha" required>
+              <label for="senha"><i class="fa-solid fa-lock"></i> Senha</label>
             </div>
+          </div>
 
-            <div class="col-md-6 mt-3">
-                <div class="form-floating mb-3">
-                    <input type="text" class="form-control fs" id="telefone" name="telefone" placeholder="Telefone"
-                        required>
-                    <label for="telefone"><i class="fa-solid fa-phone"></i> Telefone</label>
-                </div>
+          <div class="col-md-6 mt-3">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="telefone" name="telefone" placeholder="Telefone" required>
+              <label for="telefone"><i class="fa-solid fa-phone"></i> Telefone</label>
             </div>
+          </div>
 
-            <div class="col-md-6 mt-3">
-                <div class="form-floating mb-3">
-                    <input type="text" class="form-control fs" id="cpfCnpj" name="cpfCnpj" placeholder="CPF ou CNPJ" required>
-                    <label for="cpfCnpj"><i class="fa-solid fa-id-card"></i> CPF / CNPJ</label>
-                </div>
+          <div class="col-md-6 mt-3">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="cpfCnpj" name="cpfCnpj" placeholder="CPF ou CNPJ" required>
+              <label for="cpfCnpj"><i class="fa-solid fa-id-card"></i> CPF / CNPJ</label>
             </div>
+          </div>
 
-            <div class="col-md-6 mt-3">
-                <div class="form-floating mb-3">
-                    <input type="text" class="form-control fs" id="rg" name="rg" placeholder="RG" required>
-                    <label for="rg"><i class="fa-solid fa-id-card"></i> RG</label>
-                </div>
+          <div class="col-md-6 mt-3">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="rg" name="rg" placeholder="RG" required>
+              <label for="rg"><i class="fa-solid fa-id-card"></i> RG</label>
             </div>
+          </div>
 
-            <div class="col-md-6 mt-3">
-                <div class="form-floating mb-3">
-                    <input type="text" class="form-control fs" id="endereco" name="endereco" placeholder="Endereço" required>
-                    <label for="endereco"><i class="fa-solid fa-map-location-dot"></i> Endereço</label>
-                </div>
+          <div class="col-md-6 mt-3">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="endereco" name="endereco" placeholder="Endereço" required>
+              <label for="endereco"><i class="fa-solid fa-map-location-dot"></i> Endereço</label>
             </div>
+          </div>
         </div>
 
-        <div class="d-flex justify-content-end mt-4">
-            <a href="/usuario/lista" class="btn btn-danger me-2">
-                <i class="fa-solid fa-ban"></i> Cancelar
-            </a>
-            <button type="button" class="btn btn-success" id="insert">
-                <i class="fa-solid fa-floppy-disk"></i> Salvar
-            </button>
+        <div class="d-flex justify-content-end mt-4 gap-2">
+          <a href="/usuario/lista" class="btn btn-danger">
+            <i class="fa-solid fa-ban"></i> Cancelar
+          </a>
+          <button type="button" class="btn btn-success" id="insert">
+            <i class="fa-solid fa-floppy-disk"></i> Salvar
+          </button>
         </div>
-    </form>
+      </form>
+    </div>
+  </div>
 </div>
-
 {% endblock %}
 
 {% block script %}

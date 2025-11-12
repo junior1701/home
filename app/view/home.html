@@ -1,7 +1,138 @@
-{% extends "main.html" %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Para Izabelly 💙</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-{% block main %}
+    body {
+      font-family: "Poppins", sans-serif;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #0a3d62, #3c6382, #82ccdd);
+      color: white;
+      text-align: center;
+      overflow: hidden;
+    }
 
-<h1>Página Inicial</h1>                    
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+      animation: fadeInDown 2s ease-in-out;
+    }
 
-{% endblock %}
+    h2 {
+      font-weight: 300;
+      font-size: 1.2em;
+      opacity: 0.9;
+    }
+
+    .heart {
+      position: absolute;
+      bottom: 0;
+      width: 20px;
+      height: 20px;
+      background: rgba(255, 255, 255, 0.8);
+      clip-path: polygon(50% 0%, 100% 35%, 80% 100%, 50% 75%, 20% 100%, 0% 35%);
+      animation: floatUp 8s linear infinite;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-110vh) scale(0.8);
+        opacity: 0;
+      }
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .message {
+      margin-top: 20px;
+      font-size: 1.4em;
+      font-style: italic;
+      max-width: 80%;
+      min-height: 70px;
+      transition: opacity 1s ease-in-out;
+    }
+
+    footer {
+      position: absolute;
+      bottom: 20px;
+      font-size: 0.9em;
+      opacity: 0.8;
+    }
+
+    /* Responsivo */
+    @media (max-width: 600px) {
+      h1 { font-size: 2em; }
+      .message { font-size: 1.2em; }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Para minha amada Izabelly 💙</h1>
+  <h2>Você é o meu sonho mais bonito.</h2>
+
+  <div class="message" id="message"></div>
+
+  <footer>Feito com todo meu amor 💌</footer>
+
+  <!-- Música de fundo -->
+  <iframe width="0" height="0" src="https://www.youtube.com/embed/ICS6uKC93w0?autoplay=1&loop=1&playlist=ICS6uKC93w0" frameborder="0" allow="autoplay"></iframe>
+
+  <script>
+    const messages = [
+      "Desde que te conheci, tudo ficou mais azul 💙",
+      "Seu sorriso ilumina meus dias mais cinzentos ✨",
+      "O amor que sinto por você é infinito, Izabelly 💫",
+      "Cada batida do meu coração chama o seu nome 💌",
+      "Você é o meu lar, mesmo quando estou longe 🕊️",
+      "Nada no mundo é mais bonito do que te amar 💖"
+    ];
+
+    const messageElement = document.getElementById("message");
+    let index = 0;
+
+    function showMessage() {
+      messageElement.style.opacity = 0;
+      setTimeout(() => {
+        messageElement.textContent = messages[index];
+        messageElement.style.opacity = 1;
+        index = (index + 1) % messages.length;
+      }, 1000);
+    }
+
+    showMessage();
+    setInterval(showMessage, 5000);
+
+    // Criar corações animados
+    function createHeart() {
+      const heart = document.createElement("div");
+      heart.classList.add("heart");
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.animationDuration = (6 + Math.random() * 4) + "s";
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 8000);
+    }
+
+    setInterval(createHeart, 500);
+  </script>
+</body>
+</html>

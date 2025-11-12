@@ -1,138 +1,257 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Para Izabelly 💙</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Roboto&display=swap');
+    /* Reset básico */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
-
     body {
-      font-family: "Poppins", sans-serif;
-      height: 100vh;
+      background: radial-gradient(ellipse at center, #00122b 0%, #000a18 80%);
+      color: #c8d6e5;
+      font-family: 'Roboto', sans-serif;
+      overflow-x: hidden;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, #0a3d62, #3c6382, #82ccdd);
-      color: white;
-      text-align: center;
-      overflow: hidden;
+      padding: 20px 15px 40px;
+      position: relative;
     }
-
-    h1 {
-      font-size: 2.5em;
+    /* Fundo estrelado animado */
+    #stars, #stars2, #stars3 {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0; left: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+    #stars {
+      background: transparent url('https://raw.githubusercontent.com/joshwcomeau/starfield/master/public/star.svg') repeat;
+      background-size: 3px 3px;
+      animation: starMove 200s linear infinite;
+      opacity: 0.3;
+    }
+    #stars2 {
+      background: transparent url('https://raw.githubusercontent.com/joshwcomeau/starfield/master/public/star.svg') repeat;
+      background-size: 2px 2px;
+      animation: starMove 150s linear infinite reverse;
+      opacity: 0.4;
+    }
+    #stars3 {
+      background: transparent url('https://raw.githubusercontent.com/joshwcomeau/starfield/master/public/star.svg') repeat;
+      background-size: 1.5px 1.5px;
+      animation: starMove 100s linear infinite;
+      opacity: 0.5;
+    }
+    @keyframes starMove {
+      from { background-position: 0 0; }
+      to { background-position: -10000px 10000px; }
+    }
+    header {
+      font-family: 'Great Vibes', cursive;
+      font-size: 3.5rem;
+      color: #2a77ff;
+      text-shadow: 0 0 10px #0050ff, 0 0 30px #0040cc;
       margin-bottom: 10px;
-      animation: fadeInDown 2s ease-in-out;
+      z-index: 10;
+      user-select: none;
     }
-
-    h2 {
-      font-weight: 300;
-      font-size: 1.2em;
-      opacity: 0.9;
-    }
-
-    .heart {
-      position: absolute;
-      bottom: 0;
-      width: 20px;
-      height: 20px;
-      background: rgba(255, 255, 255, 0.8);
-      clip-path: polygon(50% 0%, 100% 35%, 80% 100%, 50% 75%, 20% 100%, 0% 35%);
-      animation: floatUp 8s linear infinite;
-    }
-
-    @keyframes floatUp {
-      0% {
-        transform: translateY(0) scale(1);
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(-110vh) scale(0.8);
-        opacity: 0;
-      }
-    }
-
-    @keyframes fadeInDown {
-      from { opacity: 0; transform: translateY(-30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .message {
-      margin-top: 20px;
-      font-size: 1.4em;
+    .subtitle {
+      font-size: 1.3rem;
       font-style: italic;
-      max-width: 80%;
-      min-height: 70px;
-      transition: opacity 1s ease-in-out;
+      color: #a2c0ff;
+      margin-bottom: 30px;
+      user-select: none;
+      max-width: 90vw;
+      text-align: center;
+      line-height: 1.4;
     }
-
-    footer {
-      position: absolute;
-      bottom: 20px;
-      font-size: 0.9em;
-      opacity: 0.8;
+    /* Galeria fotos */
+    .gallery {
+      display: flex;
+      gap: 15px;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      padding-bottom: 10px;
+      width: 100%;
+      max-width: 600px;
+      scroll-behavior: smooth;
+      user-select: none;
+      z-index: 5;
     }
-
-    /* Responsivo */
-    @media (max-width: 600px) {
-      h1 { font-size: 2em; }
-      .message { font-size: 1.2em; }
+    .gallery::-webkit-scrollbar {
+      height: 6px;
+    }
+    .gallery::-webkit-scrollbar-thumb {
+      background: #0040cc;
+      border-radius: 10px;
+      box-shadow: 0 0 8px #2a77ff;
+    }
+    .gallery img {
+      width: 280px;
+      max-height: 420px;
+      object-fit: cover;
+      border-radius: 15px;
+      border: 3px solid #2a77ff;
+      box-shadow: 0 0 15px #0040cc;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      cursor: pointer;
+    }
+    .gallery img:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 30px #2a77ff;
+    }
+    /* Carta e botão */
+    #letter-container {
+      max-width: 600px;
+      margin-top: 40px;
+      background: rgba(15, 35, 75, 0.85);
+      border-radius: 15px;
+      padding: 25px 30px;
+      box-shadow: 0 0 25px #2a77ff;
+      color: #c9d6ff;
+      font-size: 1.25rem;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      font-family: 'Roboto', sans-serif;
+      display: none; /* começa escondida */
+      user-select: text;
+    }
+    #read-btn {
+      margin-top: 30px;
+      padding: 12px 28px;
+      font-size: 1.3rem;
+      font-weight: 600;
+      background: #0035aa;
+      border: none;
+      border-radius: 30px;
+      color: #c9d6ff;
+      cursor: pointer;
+      box-shadow: 0 0 20px #2a77ff;
+      transition: background 0.3s ease;
+      user-select: none;
+      z-index: 10;
+      align-self: center;
+    }
+    #read-btn:hover {
+      background: #0055ff;
+      box-shadow: 0 0 40px #2a77ff;
+    }
+    /* Container geral */
+    .container {
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      max-width: 650px;
+      padding-bottom: 50px;
+    }
+    /* Efeito digitação */
+    .typing {
+      border-right: 3px solid #2a77ff;
+      animation: blink-caret 1s step-end infinite;
+      white-space: pre-wrap;
+    }
+    @keyframes blink-caret {
+      from, to { border-color: transparent; }
+      50% { border-color: #2a77ff; }
+    }
+    /* Música escondida */
+    #audio-background {
+      display: none;
+    }
+    /* Responsividade */
+    @media (max-width: 720px) {
+      header {
+        font-size: 2.6rem;
+      }
+      .gallery img {
+        width: 200px;
+        max-height: 300px;
+      }
+      #letter-container {
+        font-size: 1.1rem;
+        padding: 20px 25px;
+      }
+      #read-btn {
+        font-size: 1.1rem;
+        padding: 10px 22px;
+      }
     }
   </style>
 </head>
 <body>
+  <div id="stars"></div>
+  <div id="stars2"></div>
+  <div id="stars3"></div>
 
-  <h1>Para minha amada Izabelly 💙</h1>
-  <h2>Você é o meu sonho mais bonito.</h2>
+  <div class="container">
+    <header>Izabelly 💙</header>
+    <div class="subtitle">"Esta é a história de um amor que o tempo não apaga..."</div>
 
-  <div class="message" id="message"></div>
+    <div class="gallery" id="gallery">
+      <!-- Fotos aqui -->
+      <img src="WhatsApp Image 2025-11-11 at 20.40.56" alt="Izabelly e você" />
+      <img src="WhatsApp Image 2025-11-11 at 20.40.55" alt="Momento especial" />
+    </div>
 
-  <footer>Feito com todo meu amor 💌</footer>
+    <button id="read-btn">Ler Carta 💌</button>
+
+    <div id="letter-container"></div>
+  </div>
 
   <!-- Música de fundo -->
-  <iframe width="0" height="0" src="https://www.youtube.com/embed/ICS6uKC93w0?autoplay=1&loop=1&playlist=ICS6uKC93w0" frameborder="0" allow="autoplay"></iframe>
+  <audio id="audio-background" src="https://www.youtube.com/watch?v=ICS6uKC93w0&list=RDICS6uKC93w0&start_radio=1" autoplay loop></audio>
 
   <script>
-    const messages = [
-      "Desde que te conheci, tudo ficou mais azul 💙",
-      "Seu sorriso ilumina meus dias mais cinzentos ✨",
-      "O amor que sinto por você é infinito, Izabelly 💫",
-      "Cada batida do meu coração chama o seu nome 💌",
-      "Você é o meu lar, mesmo quando estou longe 🕊️",
-      "Nada no mundo é mais bonito do que te amar 💖"
-    ];
+    const letterText = `Minha amada Izabelly,
 
-    const messageElement = document.getElementById("message");
-    let index = 0;
+Desde o primeiro instante em que te vi, soube que havia encontrado algo único e especial.  
+Seu sorriso ilumina meus dias e seu olhar me faz acreditar no amor verdadeiro.  
+Você é a estrela que guia meu caminho, meu porto seguro em qualquer tempestade.
 
-    function showMessage() {
-      messageElement.style.opacity = 0;
-      setTimeout(() => {
-        messageElement.textContent = messages[index];
-        messageElement.style.opacity = 1;
-        index = (index + 1) % messages.length;
-      }, 1000);
+Cada momento ao seu lado é uma bênção que guardo com carinho.  
+Te amo mais do que palavras podem expressar e agradeço por cada segundo que compartilhamos.
+
+Com todo meu amor,  
+[Seu nome]`;
+
+    const readBtn = document.getElementById('read-btn');
+    const letterContainer = document.getElementById('letter-container');
+
+    function typeWriter(text, i = 0) {
+      if (i < text.length) {
+        letterContainer.innerHTML += text.charAt(i);
+        setTimeout(() => typeWriter(text, i + 1), 40);
+      }
     }
 
-    showMessage();
-    setInterval(showMessage, 5000);
+    readBtn.addEventListener('click', () => {
+      if (letterContainer.style.display === 'none' || letterContainer.style.display === '') {
+        letterContainer.style.display = 'block';
+        letterContainer.innerHTML = '';
+        typeWriter(letterText);
+        readBtn.textContent = 'Ocultar Carta ❌';
+      } else {
+        letterContainer.style.display = 'none';
+        readBtn.textContent = 'Ler Carta 💌';
+      }
+    });
 
-    // Criar corações animados
-    function createHeart() {
-      const heart = document.createElement("div");
-      heart.classList.add("heart");
-      heart.style.left = Math.random() * 100 + "vw";
-      heart.style.animationDuration = (6 + Math.random() * 4) + "s";
-      document.body.appendChild(heart);
-      setTimeout(() => heart.remove(), 8000);
-    }
+    // Música autoplay (funciona melhor se ativada pelo usuário)
+    const audio = document.getElementById('audio-background');
+    audio.volume = 0.1;
+    // Nota: Navegadores modernos geralmente bloqueiam autoplay com som, a pessoa precisará ativar manualmente.
 
-    setInterval(createHeart, 500);
   </script>
 </body>
 </html>

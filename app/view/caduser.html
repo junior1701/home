@@ -1,11 +1,10 @@
-
 {% extends "main.html" %}
 
 {% block main %}
 <div class="container mt-5">
     <h1 class="mb-4"><i class="fa-solid fa-user-plus"></i> Cadastro de Usuário</h1>
 
-    <form id="form" method="post" action="/usuario/salvar">
+    <form id="form">
         <div class="row">
             <div class="col-md-6 mt-3">
                 <div class="form-floating mb-3">
@@ -16,15 +15,9 @@
 
             <div class="col-md-6 mt-3">
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control fs" id="sobrenome" name="sobrenome" placeholder="Sobrenome" required>
+                    <input type="text" class="form-control fs" id="sobrenome" name="sobrenome" placeholder="Sobrenome"
+                        required>
                     <label for="sobrenome"><i class="fa-solid fa-user"></i> Sobrenome</label>
-                </div>
-            </div>
-
-            <div class="col-md-6 mt-3">
-                <div class="form-floating mb-3">
-                    <input type="email" class="form-control fs" id="email" name="email" placeholder="Email" required>
-                    <label for="email"><i class="fa-solid fa-envelope"></i> E-mail</label>
                 </div>
             </div>
 
@@ -37,15 +30,8 @@
 
             <div class="col-md-6 mt-3">
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control fs" id="telefone" name="telefone" placeholder="Telefone"
+                    <input type="text" class="form-control fs" id="cpf" name="cpf" placeholder="CPF ou CNPJ"
                         required>
-                    <label for="telefone"><i class="fa-solid fa-phone"></i> Telefone</label>
-                </div>
-            </div>
-
-            <div class="col-md-6 mt-3">
-                <div class="form-floating mb-3">
-                    <input type="text" class="form-control fs" id="cpfCnpj" name="cpfCnpj" placeholder="CPF ou CNPJ" required>
                     <label for="cpfCnpj"><i class="fa-solid fa-id-card"></i> CPF / CNPJ</label>
                 </div>
             </div>
@@ -59,7 +45,8 @@
 
             <div class="col-md-6 mt-3">
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control fs" id="endereco" name="endereco" placeholder="Endereço" required>
+                    <input type="text" class="form-control fs" id="endereco" name="endereco" placeholder="Endereço"
+                        required>
                     <label for="endereco"><i class="fa-solid fa-map-location-dot"></i> Endereço</label>
                 </div>
             </div>
@@ -69,9 +56,9 @@
             <a href="/usuario/lista" class="btn btn-danger me-2">
                 <i class="fa-solid fa-ban"></i> Cancelar
             </a>
-            <button type="button" class="btn btn-success" id="insert">
-                <i class="fa-solid fa-floppy-disk"></i> Salvar
-            </button>
+            <button type="button" id="salvar" class="btn btn-success" onclick="insert">
+                <i class="fa-solid fa-floppy-disk">
+                </i>Salvar</button>
         </div>
     </form>
 </div>

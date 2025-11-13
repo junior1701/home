@@ -409,6 +409,7 @@ return array(
     'app\\controller\\Home' => $baseDir . '/app/controller/Home.php',
     'app\\controller\\User' => $baseDir . '/app/controller/User.php',
     'app\\database\\Connection' => $baseDir . '/app/database/Connection.php',
+    'app\\database\\builder\\DeleteQuery' => $baseDir . '/app/database/builder/DeleteQuery.php',
     'app\\database\\builder\\InsertQuery' => $baseDir . '/app/database/builder/InsertQuery.php',
     'app\\trait\\Template' => $baseDir . '/app/trait/Template.php',
 );

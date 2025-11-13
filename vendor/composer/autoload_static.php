@@ -516,6 +516,7 @@ class ComposerStaticInit2a4aa7dd4ddb86da09e7c7873127242d
         'app\\controller\\Home' => __DIR__ . '/../..' . '/app/controller/Home.php',
         'app\\controller\\User' => __DIR__ . '/../..' . '/app/controller/User.php',
         'app\\database\\Connection' => __DIR__ . '/../..' . '/app/database/Connection.php',
+        'app\\database\\builder\\DeleteQuery' => __DIR__ . '/../..' . '/app/database/builder/DeleteQuery.php',
         'app\\database\\builder\\InsertQuery' => __DIR__ . '/../..' . '/app/database/builder/InsertQuery.php',
         'app\\trait\\Template' => __DIR__ . '/../..' . '/app/trait/Template.php',
     );

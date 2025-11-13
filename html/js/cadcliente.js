@@ -8,6 +8,6 @@ $('#celular').inputmask({ "mask": ["(99) 99999-9999"] });
 
 Salvar.addEventListener('click', async () => {
     Validate.SetForm('form').Valid();
-    const response = await Requests.SetForm('form').Post('/usuario/insert');
+    const response = await Requests.SetForm('form').Post('/cliente/insert');
     console.log(response);
 });

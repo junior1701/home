@@ -4,6 +4,7 @@
 
 <div class="container">
     <form id="form">
+        <input type="hidden" id="id" name="id">
         <div class="container mt-5">
             <div class="row">
                 <div class="col-12 mt-3 mb-3">
@@ -33,6 +34,7 @@
                                 <th><i class="fa-solid fa-user"></i>Sobrenome</th>
                                 <th><i class="fa-solid fa-id-card"></i>CPF</th>
                                 <th><i class="fa-solid fa-id-card"></i>Rg</th>
+                                <th><i class="fa-solid fa-cog"></i>Ações</th>
                             </tr>
                         </thead>
                         <tbody id="listacliente">
@@ -42,35 +44,14 @@
                                 <td>Silva</td>
                                 <td>123.456.789-00</td>
                                 <td>12.345.678-9</td>
+                                <td>
+                                    <button type="button" id="delete" class="btn btn-danger btn-sm"
+                                        onclick="deletar('5')">
+                                        <i class="fas fa-trash"></i> Excluir
+                                    </button>
+                                </td>
                             </tr>
-                            <tr>
-                                <td>002</td>
-                                <td>Mariana</td>
-                                <td>Souza</td>
-                                <td>987.654.321-00</td>
-                                <td>98.765.432-1</td>
-                            </tr>
-                            <tr>
-                                <td>003</td>
-                                <td>Felipe</td>
-                                <td>Almeida</td>
-                                <td>456.789.123-00</td>
-                                <td>45.678.912-3</td>
-                            </tr>
-                            <tr>
-                                <td>004</td>
-                                <td>Ana</td>
-                                <td>Carvalho</td>
-                                <td>321.654.987-00</td>
-                                <td>32.165.498-7</td>
-                            </tr>
-                            <tr>
-                                <td>005</td>
-                                <td>João</td>
-                                <td>Pereira</td>
-                                <td>159.753.486-00</td>
-                                <td>15.975.348-6</td>
-                            </tr>
+
                         </tbody>
 
                         </tbody>
@@ -79,4 +60,8 @@
             </div>
         </div>
     </form>
+    {% endblock %}
+    {% block script %}
+    {% include "script.html" %}
+    <script defer type="module" src="/js/listuser.js"></script>
     {% endblock %}

@@ -21,17 +21,17 @@ class DeleteQuery
     #$logic Operador lógico adicional (AND, OR). Pode ser nulo.
     public function where(string $field, string $operator, string|int  $value, ?string $logic = null)
     {
-    # Define um placeholder baseado no nome do campo
-    $placeHolder = '';
-    $placeHolder = $field;
-    #Caso o campo venha com um alias (ex: "u.id), extrai apenas o nome da coluna (ex: "id")
-    if (str_contains($placeHolder, '.')) {
-        $placeHolder = substr($field, strpos($field, '.') + 1);
-    }
-    #Monta a expressão da cláusula WHERE com o placeholder e operador lógico
-    $this->where[] = "{$field} {$operator} :{$placeHolder} {$logic}";
-    $this->binds[$placeHolder] = $value;
-    return $this;
+        # Define um placeholder baseado no nome do campo
+        $placeHolder = '';
+        $placeHolder = $field;
+        #Caso o campo venha com um alias (ex: "u.id), extrai apenas o nome da coluna (ex: "id")
+        if (str_contains($placeHolder, '.')) {
+            $placeHolder = substr($field, strpos($field, '.') + 1);
+        }
+        #Monta a expressão da cláusula WHERE com o placeholder e operador lógico
+        $this->where[] = "{$field} {$operator} :{$placeHolder} {$logic}";
+        $this->binds[$placeHolder] = $value;
+        return $this;
     }
     #Método privado que gera a query DELETE em forma de string.
     private function createQuery()
@@ -63,7 +63,6 @@ class DeleteQuery
     #true em caso de sucesso, ou lança exceção se falhar.
     public function delete()
     {
-
         #Cria a query completa
         $query = $this->createQuery();
         try {
@@ -74,6 +73,5 @@ class DeleteQuery
             #Captura exceções do PDO e lança uma nova exceção personalizada
             throw new \Exception("Restriçao: {$e->getMessage()}");
         }
-
     }
 }

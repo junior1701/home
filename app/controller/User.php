@@ -4,6 +4,7 @@ namespace app\controller;
 
 use app\database\builder\DeleteQuery;
 use app\database\builder\InsertQuery;
+use app\database\builder\SelectQuery;
 
 class User extends Base
 {
@@ -79,46 +80,48 @@ class User extends Base
     public function listuser($request, $response)
     {
         $form = $request->getParsedBody();
-          $data =[
+        # O índice da coluna para ordenação
+        $order = $form['order'][0]['column'];
+        # O tipo de ordenação (ascendente ou descendente)
+        $orderType = $form['order'][0]['dir'];
+        # O índice do primeiro registro da página
+        $form['start'];
+        # A quantidade de registros por página
+        $form['length'];
+        # O termo de pesquisa
+        $form['search']['value'];
+        # O termo pesquisado
+        $term = $form['search']['value'];
+
+        $query = SelectQuery::select('id, nome, sobrenome, cpf, rg')->from('usuario');
+
+        if (!is_null($term) && ($term !== '')) {
+            $query->where('nome', 'ilike', $term, 'or')
+                  ->where('sobrenome', 'ilike', $term );
+
+        }
+
+        $users = $query->fetchAll();
+
+        $userData = [];
+        foreach ($users as $key => $value) {
+            $usersData[$key] = [
+                $value['id'],
+                $value['nome'],
+                $value['sobrenome'],
+                $value['cpf'],
+                $value['rg'],
+                "<button class='btn btn-sm btn-warning'><i class='fa-solid fa-pen-to-square'></i>Editar</button>
+                 <button class='btn btn-sm btn-danger btn-delete'><i class='fa-solid fa-trash'></i>Excluir</button>"
+            ];
+           
+        }
+
+        $data =[
             'status' => true,
-            'data' => [
-                [
-                 1,
-                 'Junior',
-                 'Silva',
-                 '000.000.000-00',
-                 '00.000.000-0'
-                 
-                ],
-                [
-                 2,
-                 'Ana',
-                 'Oliveira',
-                 '111.111.111-11',
-                 '11.111.111-1'
-                ],
-                [
-                 3,
-                 'Carlos',
-                 'Souza',
-                 '222.222.222-22',
-                 '22.222.222-2'
-                ],
-                [
-                 4,
-                 'Mariana',
-                 'Pereira',
-                 '333.333.333-33',
-                 '33.333.333-3'
-                ],
-                [
-                 5,
-                 'Pedro',
-                 'Almeida',
-                 '444.444.444-44',
-                 '44.444.444-4'
-                ],
-            ]
+            'recordsTotal' => count($users),
+            'recordsFiltered' => count($users),
+            'data' => $usersData
         ];
         $payload = json_encode($data);
 

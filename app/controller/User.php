@@ -76,4 +76,69 @@ class User extends Base
             die;
         }
     }
+    public function listuser($request, $response)
+    {
+        $form = $request->getParsedBody();
+          $data =[
+            'status' => true,
+            'data' => [
+                [
+                 1,
+                 'Junior',
+                 'Silva',
+                 '000.000.000-00',
+                 '00.000.000-0'
+                 
+                ],
+                [
+                 2,
+                 'Ana',
+                 'Oliveira',
+                 '111.111.111-11',
+                 '11.111.111-1'
+                ],
+                [
+                 3,
+                 'Carlos',
+                 'Souza',
+                 '222.222.222-22',
+                 '22.222.222-2'
+                ],
+                [
+                 4,
+                 'Mariana',
+                 'Pereira',
+                 '333.333.333-33',
+                 '33.333.333-3'
+                ],
+                [
+                 5,
+                 'Pedro',
+                 'Almeida',
+                 '444.444.444-44',
+                 '44.444.444-4'
+                ],
+            ]
+        ];
+        $payload = json_encode($data);
+
+        $response->getBody()->write($payload);
+
+        return $response
+            ->withHeader('Content-Type', 'application/json')
+            ->withStatus(201);
+
+        var_dump($form);
+
+        /*
+        order[0][column]
+        order[0][dir]
+        order[0][name]
+        start
+        length
+        search[value]
+    }
+
+    */
+    }
 }

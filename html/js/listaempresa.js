@@ -17,13 +17,13 @@ const tabela = new $('#tabela').DataTable({
         searchPlaceholder: 'Digite sua pesquisa...',
     },
     ajax: {
-        url: '/cliente/listacliente',
+        url: '/empresa/listaempresa',
         type: 'POST'
     }
 });
 async function Delete(id) {
     document.getElementById('id').value = id;
-    const response = await Requests.SetForm('form').Post('/cliente/delete');
+    const response = await Requests.SetForm('form').Post('/empresa/delete');
     if (!response.status) {
         Swal.fire({
             title: "Erro ao remover!",
@@ -49,10 +49,4 @@ async function Delete(id) {
     });
     tabela.ajax.reload();
 }
-async function Editar(id) {
-    document.getElementById('id').value = id;
-    $('#editar').modal('show');
-    //const response = await Requests.SetForm('form').Post('/cliente/update');
-}
 window.Delete = Delete;
-window.Editar = Editar;

@@ -6,35 +6,31 @@ use app\database\builder\SelectQuery;
 use app\database\builder\InsertQuery;
 use app\database\builder\DeleteQuery;
 
-class User extends Base
+class Fornecedor extends Base
 {
 
     public function lista($request, $response)
     {
-
         $dadosTemplate = [
-            'titulo' => 'Lista de usuário'
+            'titulo' => 'Lista de fornecedor'
         ];
         return $this->getTwig()
-            ->render($response, $this->setView('listauser'), $dadosTemplate)
+            ->render($response, $this->setView('listafornecedor'), $dadosTemplate)
             ->withHeader('Content-Type', 'text/html')
             ->withStatus(200);
     }
     public function insert($request, $response)
     {
-
         try {
             $nome = $_POST['nome'];
-
             $sobrenome = $_POST['sobrenome'];
             $cpf = $_POST['cpf'];
             $rg = $_POST['rg'];
-
             $FieldsAndValues = [
-                'nome' => $nome,
-                'sobrenome' => $sobrenome,
-                'cpf' => $cpf,
-                'rg' => $rg
+                'nome_fantasia' => $nome,
+                'sobrenome_razao' => $sobrenome,
+                'cpf_cnpj' => $cpf,
+                'rg_ie' => $rg
             ];
             if (is_null($nome) || $nome === '') {
                 echo json_encode(['status' => false, 'msg' => 'Por favor informe o nome!', 'id' => 0]);
@@ -52,7 +48,7 @@ class User extends Base
                 echo json_encode(['status' => false, 'msg' => 'Por favor informe o rg!', 'id' => 0]);
                 die;
             }
-            $IsSave = InsertQuery::table('usuario')->save($FieldsAndValues);
+            $IsSave = InsertQuery::table('fornecedor')->save($FieldsAndValues);
 
             if (!$IsSave) {
                 echo json_encode(['status' => false, 'msg' => $IsSave, 'id' => 0]);
@@ -67,14 +63,14 @@ class User extends Base
     public function cadastro($request, $response)
     {
         $dadosTemplate = [
-            'titulo' => 'Cadastro de usuário'
+            'titulo' => 'Cadastro de fornecedor'
         ];
         return $this->getTwig()
-            ->render($response, $this->setView('user'), $dadosTemplate)
+            ->render($response, $this->setView('fornecedor'), $dadosTemplate)
             ->withHeader('Content-Type', 'text/html')
             ->withStatus(200);
     }
-    public function listauser($request, $response)
+    public function listafornecedor($request, $response)
     {
         #Captura todas a variaveis de forma mais segura VARIAVEIS POST.
         $form = $request->getParsedBody();
@@ -88,44 +84,45 @@ class User extends Base
         $length = $form['length'];
         $fields = [
             0 => 'id',
-            1 => 'nome',
-            2 => 'sobrenome',
-            3 => 'cpf',
-            4 => 'rg'
+            1 => 'nome_fantasia',
+            2 => 'sobrenome_razao',
+            3 => 'cpf_cnpj',
+            4 => 'rg_ie'
         ];
         #Capturamos o nome do capo a ser ordenado.
         $orderField = $fields[$order];
         #O termo pesquisado
         $term = $form['search']['value'];
-        $query = SelectQuery::select('id,nome,sobrenome,cpf,rg')->from('usuario');
+        $query = SelectQuery::select('id,nome_fantasia,sobrenome_razao,cpf_cnpj,rg_ie')->from('fornecedor');
         if (!is_null($term) && ($term !== '')) {
-            $query->where('usuario.nome', 'ilike', "%{$term}%", 'or')
-                ->where('usuario.sobrenome', 'ilike', "%{$term}%", 'or')
-                ->where('usuario.cpf', 'ilike', "%{$term}%");
+            $query->where('fornecedor.nome_fantasia', 'ilike', "%{$term}%", 'or')
+                ->where('fornecedor.sobrenome_razao', 'ilike', "%{$term}%", 'or')
+                ->where('fornecedor.cpf_cnpj', 'ilike', "%{$term}%", 'or')
+                ->where('fornecedor.rg_ie', 'ilike', "%{$term}%");
         }
+
         if (!is_null($order) && ($order !== '')) {
             $query->order($orderField, $orderType);
         }
-        $users = $query
+        $fornecedores = $query
             ->limit($length, $start)
             ->fetchAll();
-        $userData = [];
-        foreach ($users as $key => $value) {
-            $userData[$key] = [
+        $fornecedorData = [];
+        foreach ($fornecedores as $key => $value) {
+            $fornecedorData[$key] = [
                 $value['id'],
-                $value['nome'],
-                $value['sobrenome'],
-                $value['cpf'],
-                $value['rg'],
-                "<button class='btn btn-warning'>Editar</button>
-                <button type='button'  onclick='Delete(" . $value['id'] . ");' class='btn btn-danger'>Excluir</button>"
+                $value['nome_fantasia'],
+                $value['sobrenome_razao'],
+                $value['cpf_cnpj'],
+                $value['rg_ie'],
+                "<button type='button'  onclick='Delete(" . $value['id'] . ");' class='btn btn-danger'>Excluir</button>"
             ];
         }
         $data = [
             'status' => true,
-            'recordsTotal' => count($users),
-            'recordsFiltered' => count($users),
-            'data' => $userData
+            'recordsTotal' => count($fornecedores),
+            'recordsFiltered' => count($fornecedores),
+            'data' => $fornecedorData
         ];
         $payload = json_encode($data);
 
@@ -139,7 +136,7 @@ class User extends Base
     {
         try {
             $id = $_POST['id'];
-            $IsDelete = DeleteQuery::table('usuario')
+            $IsDelete = DeleteQuery::table('fornecedor')
                 ->where('id', '=', $id)
                 ->delete();
 

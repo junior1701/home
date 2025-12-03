@@ -20,4 +20,14 @@ trait Template
     {
         return $name . EXT_VIEW;
     }
+    public function SendJson($respone, array $data, int $statusCode = 200)
+    {
+        # Converte o array PHP para um JSON
+        $playload = json_encode($data);
+        # Retorna a resposta em formato json
+        $respone->getBody()->write($playload);
+        return $respone
+            ->withHeader('Content-Type', 'application/json')
+            ->withStatus($statusCode);
+    }       
 }

@@ -76,39 +76,59 @@ class User extends Base
     }
     public function listauser($request, $response)
     {
-        #Captura todas a variaveis de forma mais segura VARIAVEIS POST.
+        # Captura todas as variáveis de forma segura
         $form = $request->getParsedBody();
-        #Qual a coluna da tabela deve ser ordenada.
+
+        # Ordenação
         $order = $form['order'][0]['column'];
-        #Tipo de ordenação
         $orderType = $form['order'][0]['dir'];
-        #Em qual registro se inicia o retorno dos registro, OFFSET
+
+        # Paginação
         $start = $form['start'];
-        #Limite de registro a serem retornados do banco de dados LIMIT
         $length = $form['length'];
+
+        # Mapeamento de colunas para ordenação
         $fields = [
             0 => 'id',
             1 => 'nome',
             2 => 'sobrenome',
             3 => 'cpf',
-            4 => 'rg'
+            4 => 'email',
+            5 => 'celular',
+            6 => 'whatsapp'
         ];
-        #Capturamos o nome do capo a ser ordenado.
+
+        # Coluna escolhida
         $orderField = $fields[$order];
-        #O termo pesquisado
+
+        # Termo pesquisado
         $term = $form['search']['value'];
-        $query = SelectQuery::select('id,nome,sobrenome,cpf,rg')->from('usuario');
-        if (!is_null($term) && ($term !== '')) {
-            $query->where('usuario.nome', 'ilike', "%{$term}%", 'or')
-                ->where('usuario.sobrenome', 'ilike', "%{$term}%", 'or')
-                ->where('usuario.cpf', 'ilike', "%{$term}%");
+
+        # Agora a busca é feita na VIEW
+        $query = SelectQuery::select('*')->from('vw_usuario_contatos');
+
+        # Filtros de pesquisa
+        if (!empty($term)) {
+
+            $query->where('nome', 'ilike', "%{$term}%", 'or')
+                ->where('sobrenome', 'ilike', "%{$term}%", 'or')
+                ->where('cpf', 'ilike', "%{$term}%", 'or')
+                ->where('email', 'ilike', "%{$term}%", 'or')
+                ->where('celular', 'ilike', "%{$term}%", 'or')
+                ->where('whatsapp', 'ilike', "%{$term}%");
         }
-        if (!is_null($order) && ($order !== '')) {
+
+        # Ordenação dinâmica
+        if (!empty($order)) {
             $query->order($orderField, $orderType);
         }
+
+        # Paginação
         $users = $query
             ->limit($length, $start)
             ->fetchAll();
+
+        # Montagem dos dados
         $userData = [];
         foreach ($users as $key => $value) {
             $userData[$key] = [
@@ -116,17 +136,23 @@ class User extends Base
                 $value['nome'],
                 $value['sobrenome'],
                 $value['cpf'],
-                $value['rg'],
+                $value['email'] ?? '',      // deixa em branco se NULL
+                $value['celular'] ?? '',    // deixa em branco se NULL
+                $value['whatsapp'] ?? '',   // deixa em branco se NULL
                 "<button class='btn btn-warning'>Editar</button>
-                <button type='button'  onclick='Delete(" . $value['id'] . ");' class='btn btn-danger'>Excluir</button>"
+         <button type='button' onclick='Delete(" . $value['id'] . ");' class='btn btn-danger'>Excluir</button>"
             ];
         }
+
+
+        # Resposta final
         $data = [
             'status' => true,
             'recordsTotal' => count($users),
             'recordsFiltered' => count($users),
             'data' => $userData
         ];
+
         $payload = json_encode($data);
 
         $response->getBody()->write($payload);
@@ -135,6 +161,7 @@ class User extends Base
             ->withHeader('Content-Type', 'application/json')
             ->withStatus(200);
     }
+
     public function delete($request, $response)
     {
         try {

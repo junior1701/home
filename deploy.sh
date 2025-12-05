@@ -14,22 +14,7 @@ NOME_USUARIO="junior"
 SENHA_USUARIO="junior"
 NOME_BANCO="junior"
 
-sudo apt update && sudo apt upgrade -y
-
 configurar_postgresql() {
-
-    sudo -u postgres psql -c "DO \$\$
-    BEGIN
-        IF NOT EXISTS (
-            SELECT FROM pg_database WHERE datname = '$NOME_BANCO'
-        ) THEN
-            CREATE DATABASE $NOME_BANCO OWNER $NOME_USUARIO;
-        ELSE
-            RAISE NOTICE 'Banco já existe: $NOME_BANCO';
-        END IF;
-    END
-    \$\$;"
-
 
     sudo -u postgres psql -c "DO \$\$
     BEGIN
@@ -49,6 +34,19 @@ configurar_postgresql() {
         END IF;
     END
     \$\$;"
+
+    sudo -u postgres psql -c "DO \$\$
+    BEGIN
+        IF NOT EXISTS (
+            SELECT FROM pg_database WHERE datname = '$NOME_BANCO'
+        ) THEN
+            CREATE DATABASE $NOME_BANCO OWNER $NOME_USUARIO;
+        ELSE
+            RAISE NOTICE 'Banco já existe: $NOME_BANCO';
+        END IF;
+    END
+    \$\$;"
+
 }
 
 criar_tabelas() {
@@ -105,9 +103,7 @@ criar_tabelas() {
         u.codigo_verificacao,
         u.data_cadastro, u.data_alteracao;
     "
-
 }
 
 configurar_postgresql
 criar_tabelas
-

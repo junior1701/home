@@ -75,7 +75,7 @@ class Login extends Base
         } catch (\Exception $e) {
             return $this->SendJson($response, ['status' => true, 'msg' => 'Restrição: ' . $e->getMessage(), 'id' => 0], 500);
         }
-    }
+    } 
     public function autenticar($request, $response)
     {
         try {

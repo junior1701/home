@@ -28,9 +28,9 @@ class Connection
 
             # Criação da nova conexão PDO com os parâmetros do banco de dados.
             static::$pdo = new PDO(
-                'pgsql:host=localhost;port=5432;dbname=senac2', # DSN (Data Source Name) para PostgreSQL.
-                'senac', # Nome de usuário do banco de dados.
-                'senac', # Senha do banco de dados.
+                'pgsql:host=localhost;port=5432;dbname=junior', # DSN (Data Source Name) para PostgreSQL.
+                'junior', # Nome de usuário do banco de dados.
+                'junior', # Senha do banco de dados.
                 $options # Opções para a conexão PDO.
             );
             static::$pdo->exec("SET NAMES 'utf8'");

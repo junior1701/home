@@ -8,7 +8,7 @@ use app\controller\Empresa;
 use app\controller\Home;
 use Slim\Routing\RouteCollectorProxy;
 
-$app->get('/', Home::class . ':home');
+$app->get('/', Login::class . ':login');
 
 $app->get('/home', Home::class . ':home');
 $app->get('/login', Login::class . ':login');

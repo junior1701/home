@@ -23,7 +23,7 @@ const tabela = new $('#tabela').DataTable({
 });
 async function Delete(id) {
     document.getElementById('id').value = id;
-    const response = await Requests.SetForm('form').Post('/empresa/delete');
+    const response = await Requests.setform('form').Post('/empresa/delete');
     if (!response.status) {
         Swal.fire({
             title: "Erro ao remover!",

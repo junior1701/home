@@ -1,6 +1,6 @@
 class Validate {
     static form;
-    static SetForm(id) {
+    static setform(id) {
         this.form = document.getElementById(id);
         if (!this.form) {
             throw new Error("Formulário não encontrado!");

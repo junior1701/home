@@ -1,6 +1,6 @@
 class Requests {
     static form;
-    static setform(id) {
+    static SetForm(id) {
         this.form = document.getElementById(id);
         if (!this.form) {
             throw new Error("O formulário não foi encontrado!");

@@ -6,8 +6,8 @@ $('#cpf').inputmask({ "mask": ["999.999.999-99", "99.999.999/9999-99"] });
 $('#tel').inputmask({ "mask": ["(99) 99999-9999"] });
 
 Salvar.addEventListener('click', async () => {
-    Validate.setform('form').Valid();
-    const response = await Requests.setform('form').Post('/empresa/insert');
+    Validate.SetForm('form').Valid();
+    const response = await Requests.SetForm('form').Post('/empresa/insert');
     console.log(response);
     if (!response.status) {
        Swal.fire({

@@ -22,48 +22,58 @@ class User extends Base
     }
     public function insert($request, $response)
     {
-
         try {
-    
-            $nome = $_POST['nome'];
-            $sobrenome = $_POST['sobrenome'];
-            $cpf = $_POST['cpf'];
-            $rg = $_POST['rg'];
-
-            $FieldsAndValues = [
-                'nome' => $nome,
-                'sobrenome' => $sobrenome,
-                'cpf' => $cpf,
-                'rg' => $rg
+            #Captura os dados do form
+            $form = $request->getParsedBody();
+            #Capturar os dados do usuário.
+            $dadosUsuario = [
+                'nome' => $form['nome'],
+                'sobrenome' => $form['sobrenome'],
+                'cpf' => $form['cpf'],
+                'rg' => $form['rg'],
+                'senha' => password_hash($form['senhaCadastro'], PASSWORD_DEFAULT)
             ];
-            if (is_null($nome) || $nome === '') {
-                echo json_encode(['status' => false, 'msg' => 'Por favor informe o nome!', 'id' => 0]);
-                die;
+            $IsInseted = InsertQuery::table('usuario')->save($dadosUsuario);
+            if (!$IsInseted) {
+                return $this->SendJson(
+                    $response,
+                    ['status' => false, 'msg' => 'Restrição: ' . $IsInseted, 'id' => 0],
+                    403
+                );
             }
-            if (is_null($sobrenome) ||  $sobrenome === '') {
-                echo json_encode(['status' => false, 'msg' => 'Por favor informe o sobrenome!', 'id' => 0]);
-                die;
-            }
-            if (is_null($cpf) || $cpf === '') {
-                echo json_encode(['status' => false, 'msg' => 'Por favor informe o cpf!', 'id' => 0]);
-                die;
-            }
-            if (is_null($rg) || $rg === '') {
-                echo json_encode(['status' => false, 'msg' => 'Por favor informe o rg!', 'id' => 0]);
-                die;
-            }
-            $IsSave = InsertQuery::table('usuario')->save($FieldsAndValues);
-
-            if (!$IsSave) {
-                echo json_encode(['status' => false, 'msg' => $IsSave, 'id' => 0]);
-                die;
-            }
-            echo json_encode(['status' => true, 'msg' => 'Salvo com sucesso!', 'id' => 0]);
-            die;
-        } catch (\Throwable $th) {
-            //throw $th;
+            #Captura o código do ultimo usuário cadastrado na tabela de usuário
+            $id = SelectQuery::select('id')->from('usuario')->order('id', 'desc')->fetch();
+            #Colocamos o ID do ultimo usuário cadastrado na varaivel $id_usuario.
+            $id_usuario = $id['id'];
+            #Inserimos o e-mail
+            $dadosContato = [
+                'id_usuario' => $id_usuario,
+                'tipo' => 'email',
+                'contato' => $form['email']
+            ];
+            InsertQuery::table('contato')->save($dadosContato);
+            $dadosContato = [];
+            #Inserimos o celular
+            $dadosContato = [
+                'id_usuario' => $id_usuario,
+                'tipo' => 'celular',
+                'contato' => $form['celular']
+            ];
+            InsertQuery::table('contato')->save($dadosContato);
+            $dadosContato = [];
+            #Inserimos o WhastaApp
+            $dadosContato = [
+                'id_usuario' => $id_usuario,
+                'tipo' => 'whatsapp',
+                'contato' => $form['whatsapp']
+            ];
+            InsertQuery::table('contato')->save($dadosContato);
+            return $this->SendJson($response, ['status' => true, 'msg' => 'Cadastro realizado com sucesso!', 'id' => $id_usuario], 201);
+        } catch (\Exception $e) {
+            return $this->SendJson($response, ['status' => true, 'msg' => 'Restrição: ' . $e->getMessage(), 'id' => 0], 500);
         }
     }
+
     public function cadastro($request, $response)
     {
         $dadosTemplate = [

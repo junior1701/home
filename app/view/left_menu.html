@@ -1,0 +1,44 @@
+<aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
+  <div class="sidebar-brand">
+      <h3 class="brand-text fw-light">{{EMPRESA}}</h3>
+  </div>
+  <div class="sidebar-wrapper">
+    <nav class="mt-2">
+      <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="navigation" aria-label="Main navigation"
+        data-accordion="false" id="navigation">
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="bi bi-plus-lg"></i>
+            <p>Cadastros<i class="nav-arrow bi bi-chevron-right"></i></p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="/usuario/lista" class="nav-link">
+                <i class="bi bi-person-circle"></i>
+                <p>Usuários</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/cliente/lista" class="nav-link">
+                <i class="bi bi-person-circle"></i>
+                <p>Cliente</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/fornecedor/lista" class="nav-link">
+                <i class="bi bi-person-circle"></i>
+                <p>Fornecedores</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/empresa/lista" class="nav-link">
+                <i class="bi bi-person-circle"></i>
+                <p>Empresas</p>
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</aside>

@@ -19,13 +19,15 @@ class Fornecedor extends Base
             ->withHeader('Content-Type', 'text/html')
             ->withStatus(200);
     }
-    public function insert($request, $response)
+   public function insert($request, $response)
     {
+
         try {
             $nome = $_POST['nome'];
             $sobrenome = $_POST['sobrenome'];
             $cpf = $_POST['cpf'];
             $rg = $_POST['rg'];
+
             $FieldsAndValues = [
                 'nome_fantasia' => $nome,
                 'sobrenome_razao' => $sobrenome,
@@ -72,58 +74,87 @@ class Fornecedor extends Base
     }
     public function listafornecedor($request, $response)
     {
-        #Captura todas a variaveis de forma mais segura VARIAVEIS POST.
+
+        
+        # Captura todas as variáveis de forma segura
         $form = $request->getParsedBody();
-        #Qual a coluna da tabela deve ser ordenada.
+
+        # Ordenação
         $order = $form['order'][0]['column'];
-        #Tipo de ordenação
         $orderType = $form['order'][0]['dir'];
-        #Em qual registro se inicia o retorno dos registro, OFFSET
+
+        # Paginação
         $start = $form['start'];
-        #Limite de registro a serem retornados do banco de dados LIMIT
         $length = $form['length'];
+
+        # Mapeamento de colunas para ordenação
         $fields = [
             0 => 'id',
             1 => 'nome_fantasia',
             2 => 'sobrenome_razao',
             3 => 'cpf_cnpj',
-            4 => 'rg_ie'
+            4 => 'rg_ie',
+            5 => 'email',
+            6 => 'celular',
+            7 => 'whatsapp'
         ];
-        #Capturamos o nome do capo a ser ordenado.
+
+        # Coluna escolhida
         $orderField = $fields[$order];
-        #O termo pesquisado
+
+        # Termo pesquisado
         $term = $form['search']['value'];
-        $query = SelectQuery::select('id,nome_fantasia,sobrenome_razao,cpf_cnpj,rg_ie')->from('fornecedor');
-        if (!is_null($term) && ($term !== '')) {
-            $query->where('fornecedor.nome_fantasia', 'ilike', "%{$term}%", 'or')
-                ->where('fornecedor.sobrenome_razao', 'ilike', "%{$term}%", 'or')
-                ->where('fornecedor.cpf_cnpj', 'ilike', "%{$term}%", 'or')
-                ->where('fornecedor.rg_ie', 'ilike', "%{$term}%");
+
+        # Agora a busca é feita na VIEW
+        $query = SelectQuery::select('*')->from('vw_fornecedor_contatos');
+
+        # Filtros de pesquisa
+        if (!empty($term)) {
+
+            $query->where('nome_fantasia', 'ilike', "%{$term}%", 'or')
+                ->where('sobrenome_razao', 'ilike', "%{$term}%", 'or')
+                ->where('cpf_cnpj', 'ilike', "%{$term}%", 'or')
+                ->where('rg_ie', 'ilike', "%{$term}%", 'or')
+                ->where('email', 'ilike', "%{$term}%", 'or')
+                ->where('celular', 'ilike', "%{$term}%", 'or')
+                ->where('whatsapp', 'ilike', "%{$term}%");
         }
 
-        if (!is_null($order) && ($order !== '')) {
+        # Ordenação dinâmica
+        if (!empty($order)) {
             $query->order($orderField, $orderType);
         }
-        $fornecedores = $query
+
+        # Paginação
+        $users = $query
             ->limit($length, $start)
             ->fetchAll();
-        $fornecedorData = [];
-        foreach ($fornecedores as $key => $value) {
-            $fornecedorData[$key] = [
+
+        # Montagem dos dados
+        $userData = [];
+        foreach ($users as $key => $value) {
+            $userData[$key] = [
                 $value['id'],
                 $value['nome_fantasia'],
                 $value['sobrenome_razao'],
                 $value['cpf_cnpj'],
-                $value['rg_ie'],
-                "<button type='button'  onclick='Delete(" . $value['id'] . ");' class='btn btn-danger'>Excluir</button>"
+                $value['email'] ?? '',      // deixa em branco se NULL
+                $value['celular'] ?? '',    // deixa em branco se NULL
+                $value['whatsapp'] ?? '',   // deixa em branco se NULL
+                "<button class='btn btn-warning'>Editar</button>
+         <button type='button' onclick='Delete(" . $value['id'] . ");' class='btn btn-danger'>Excluir</button>"
             ];
         }
+
+
+        # Resposta final
         $data = [
             'status' => true,
-            'recordsTotal' => count($fornecedores),
-            'recordsFiltered' => count($fornecedores),
-            'data' => $fornecedorData
+            'recordsTotal' => count($users),
+            'recordsFiltered' => count($users),
+            'data' => $userData
         ];
+
         $payload = json_encode($data);
 
         $response->getBody()->write($payload);

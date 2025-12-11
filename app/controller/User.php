@@ -24,8 +24,8 @@ class User extends Base
     {
 
         try {
+    
             $nome = $_POST['nome'];
-
             $sobrenome = $_POST['sobrenome'];
             $cpf = $_POST['cpf'];
             $rg = $_POST['rg'];

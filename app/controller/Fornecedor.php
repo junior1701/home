@@ -19,49 +19,60 @@ class Fornecedor extends Base
             ->withHeader('Content-Type', 'text/html')
             ->withStatus(200);
     }
-   public function insert($request, $response)
+    public function insert($request, $response)
     {
-
         try {
-            $nome = $_POST['nome'];
-            $sobrenome = $_POST['sobrenome'];
-            $cpf = $_POST['cpf'];
-            $rg = $_POST['rg'];
-
-            $FieldsAndValues = [
-                'nome_fantasia' => $nome,
-                'sobrenome_razao' => $sobrenome,
-                'cpf_cnpj' => $cpf,
-                'rg_ie' => $rg
+            #Captura os dados do form
+            $form = $request->getParsedBody();
+            #Capturar os dados do usuário.
+            $dadosFornecedor = [
+                'nome_fantasia' => $form['nome_fantasia'],
+                'sobrenome_razao' => $form['sobrenome_razao'],
+                'cpf_cnpj' => $form['cpf_cnpj'],
+                'rg_ie' => $form['rg_ie'],
+                'senha' => password_hash($form['senhaCadastro'], PASSWORD_DEFAULT)
             ];
-            if (is_null($nome) || $nome === '') {
-                echo json_encode(['status' => false, 'msg' => 'Por favor informe o nome!', 'id' => 0]);
-                die;
+            $IsInseted = InsertQuery::table('fornecedor')->save($dadosFornecedor);
+            if (!$IsInseted) {
+                return $this->SendJson(
+                    $response,
+                    ['status' => false, 'msg' => 'Restrição: ' . $IsInseted, 'id' => 0],
+                    403
+                );
             }
-            if (is_null($sobrenome) ||  $sobrenome === '') {
-                echo json_encode(['status' => false, 'msg' => 'Por favor informe o sobrenome!', 'id' => 0]);
-                die;
-            }
-            if (is_null($cpf) || $cpf === '') {
-                echo json_encode(['status' => false, 'msg' => 'Por favor informe o cpf!', 'id' => 0]);
-                die;
-            }
-            if (is_null($rg) || $rg === '') {
-                echo json_encode(['status' => false, 'msg' => 'Por favor informe o rg!', 'id' => 0]);
-                die;
-            }
-            $IsSave = InsertQuery::table('fornecedor')->save($FieldsAndValues);
-
-            if (!$IsSave) {
-                echo json_encode(['status' => false, 'msg' => $IsSave, 'id' => 0]);
-                die;
-            }
-            echo json_encode(['status' => true, 'msg' => 'Salvo com sucesso!', 'id' => 0]);
-            die;
-        } catch (\Throwable $th) {
-            //throw $th;
+            #Captura o código do ultimo fornecedor cadastrado na tabela de fornecedor
+            $id = SelectQuery::select('id')->from('fornecedor')->order('id', 'desc')->fetch();
+            #Colocamos o ID do ultimo fornecedor cadastrado na varaivel $id_fornecedor.
+            $id_fornecedor = $id['id'];
+            #Inserimos o e-mail
+            $dadosContato = [
+                'id_fornecedor' => $id_fornecedor,
+                'tipo' => 'email',
+                'contato' => $form['email']
+            ];
+            InsertQuery::table('contato')->save($dadosContato);
+            $dadosContato = [];
+            #Inserimos o celular
+            $dadosContato = [
+                'id_fornecedor' => $id_fornecedor,
+                'tipo' => 'celular',
+                'contato' => $form['celular']
+            ];
+            InsertQuery::table('contato')->save($dadosContato);
+            $dadosContato = [];
+            #Inserimos o WhastaApp
+            $dadosContato = [
+                'id_fornecedor' => $id_fornecedor,
+                'tipo' => 'whatsapp',
+                'contato' => $form['whatsapp']
+            ];
+            InsertQuery::table('contato')->save($dadosContato);
+            return $this->SendJson($response, ['status' => true, 'msg' => 'Cadastro realizado com sucesso!', 'id' => $id_fornecedor], 201);
+        } catch (\Exception $e) {
+            return $this->SendJson($response, ['status' => true, 'msg' => 'Restrição: ' . $e->getMessage(), 'id' => 0], 500);
         }
     }
+
     public function cadastro($request, $response)
     {
         $dadosTemplate = [
@@ -75,7 +86,7 @@ class Fornecedor extends Base
     public function listafornecedor($request, $response)
     {
 
-        
+
         # Captura todas as variáveis de forma segura
         $form = $request->getParsedBody();
 
@@ -100,7 +111,7 @@ class Fornecedor extends Base
         ];
 
         # Coluna escolhida
-        $orderField = $fields[$order];
+        $orderField = (intval($order) > 8) ? $fields[$order] : $fields[0];
 
         # Termo pesquisado
         $term = $form['search']['value'];
@@ -138,10 +149,11 @@ class Fornecedor extends Base
                 $value['nome_fantasia'],
                 $value['sobrenome_razao'],
                 $value['cpf_cnpj'],
+                $value['rg_ie'],
                 $value['email'] ?? '',      // deixa em branco se NULL
                 $value['celular'] ?? '',    // deixa em branco se NULL
                 $value['whatsapp'] ?? '',   // deixa em branco se NULL
-                "<button class='btn btn-warning'>Editar</button>
+                "<a href='/fornecedor/alterar/{$value['id']}' class='btn btn-warning'>Editar</a>
          <button type='button' onclick='Delete(" . $value['id'] . ");' class='btn btn-danger'>Excluir</button>"
             ];
         }
@@ -161,6 +173,25 @@ class Fornecedor extends Base
 
         return $response
             ->withHeader('Content-Type', 'application/json')
+            ->withStatus(200);
+    }
+    public function alterar($request, $response, $args)
+    {
+        $id = $args['id'];
+        $fornecedor = SelectQuery::select()
+            ->from('vw_fornecedor_contatos')
+            ->where('id', '=', $id)
+            ->fetch();
+
+        $dadosTemplate = [
+            'titulo' => 'Alterar fornecedor',
+            'fornecedor' => $fornecedor,
+            'id' => $id,
+            'acao' => 'alterar'
+        ];
+        return $this->getTwig()
+            ->render($response, $this->setView('fornecedor'), $dadosTemplate)
+            ->withHeader('Content-Type', 'text/html')
             ->withStatus(200);
     }
     public function delete($request, $response)

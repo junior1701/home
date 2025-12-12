@@ -3,8 +3,10 @@
 {% block main %}
 <div class="container mt-5">
     <!-- <h1 class="mb-4"><i class="fa-solid fa-user-plus"></i> Cadastro de Empresa</h1> -->
-    
+
     <form id="form">
+        <input type="text" name="acao" id="acao" value="{{acao}}">
+
         <ul class="nav nav-tabs mt-3" id="myTab" role="tablist">
             <li class="nav-item" role="presentation">
                 <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#perfil"
@@ -30,56 +32,84 @@
                 <div class="row">
                     <div class="col-md-6 mt-3">
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control fs" id="nome" name="nome" placeholder="Nome"
-                                required>
-                            <label for="nome"><i class="fa-solid fa-user"></i> Nome Fantasia</label>
+                            <input type="text" class="form-control fs" id="nome_fantasia" name="nome_fantasia"
+                                placeholder="nome_fantasia" required value="{{empresa.nome_fantasia}}">
+                            <label for="nome_fantasia"><i class="fa-solid fa-user"></i> Nome Fantasia</label>
                         </div>
                     </div>
 
                     <div class="col-md-6 mt-3">
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control fs" id="sobrenome" name="sobrenome"
-                                placeholder="Sobrenome" required>
-                            <label for="sobrenome"><i class="fa-solid fa-user"></i> Razão Social</label>
+                            <input type="text" class="form-control fs" id="razao" name="razao" placeholder="razao"
+                                required value="{{empresa.razao}}">
+                            <label for="razao"><i class="fa-solid fa-user"></i> Sobrenome | Razão Social</label>
                         </div>
                     </div>
 
                     <div class="col-md-6 mt-3">
                         <div class="form-floating mb-3">
-                            <input type="password" class="form-control fs" id="senha" name="senha" placeholder="Senha"
-                                required>
-                            <label for="senha"><i class="fa-solid fa-lock"></i> Senha</label>
+                            <input type="text" class="form-control fs" id="cnpj" name="cnpj" placeholder="cnpj" required
+                                value="{{empresa.cnpj}}">
+                            <label for="cnpj"><i class="fa-solid fa-id-card"></i> CNPJ</label>
                         </div>
                     </div>
 
                     <div class="col-md-6 mt-3">
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control fs" id="cpf" name="cpf" placeholder="CPF ou CNPJ"
-                                required>
-                            <label for="cpfCnpj"><i class="fa-solid fa-id-card"></i>CNPJ</label>
+                            <input type="text" class="form-control fs" id="celular" name="celular"
+                                placeholder="Telefone" required value="{{empresa.celular}}">
+                            <label for="celular"><i class="fa-solid fa-phone"></i> Telefone</label>
                         </div>
                     </div>
 
                     <div class="col-md-6 mt-3">
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control fs" id="rg" name="rg" placeholder="RG" required>
-                            <label for="rg"><i class="fa-solid fa-id-card"></i>IE</label>
+                            <input type="text" class="form-control fs" id="whatsapp" name="whatsapp"
+                                placeholder="Whatsapp" required value="{{empresa.whatsapp}}">
+                            <label for="whatsapp"><i class="fa-brands fa-whatsapp"></i> Whatsapp</label>
                         </div>
                     </div>
+
                     <div class="col-md-6 mt-3">
                         <div class="form-floating mb-3">
-                            <label for="data_nascimento"><i class="fa-solid fa-id-card"></i>Data de abertura</label>
-                            <input type="date" class="form-control fs" id="data_nascimento" name="data_nascimento" placeholder="Data de abertura" required>
+                            <input type="email" class="form-control fs" id="email" name="email" placeholder="Email"
+                                required value="{{empresa.email}}">
+                            <label for="email"><i class="fa-solid fa-envelope"></i> Email</label>
                         </div>
                     </div>
+
+                    <div class="col-md-6 mt-3">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control fs" id="ie" name="ie" placeholder="ie" required
+                                value="{{empresa.ie}}">
+                            <label for="ie"><i class="fa-solid fa-id-card"></i> IE</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mt-3">
+                        <div class="form-floating mb-3">
+                            <input type="password" class="form-control fs" id="senhaCadastro" name="senhaCadastro"
+                                placeholder="Senha" required>
+                            <label for="senhaCadastro"><i class="fa-solid fa-lock"></i> Senha</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mt-3">
+                        <div class="form-floating mb-3">
+                            <label for="data_abertura"><i class="fa-solid fa-calendar"></i> Data de Abertura</label>
+                            <input type="date" class="form-control fs" id="data_abertura" name="data_abertura"
+                                placeholder="data_abertura" required value="{{empresa.data_abertura}}">
+                        </div>
+                    </div>
+
                     <div class="col-md-6 mt-3">
                         <div class="form-check mb-3">
-                            <label class="form-check-input" for="ativo">Ativo?</label>
-                            <input class="form-check-input" type="checkbox" id="status" name="status" placeholder="status" required>
+                            <input class="form-check-input" type="checkbox" id="status" name="status" required>
+                            <label class="form-check-label" for="status">Ativo?</label>
                         </div>
                     </div>
-                    
                 </div>
+
                 <div class="d-flex justify-content-end mt-4">
                     <a href="/usuario/lista" class="btn btn-danger me-2">
                         <i class="fa-solid fa-ban"></i> Cancelar

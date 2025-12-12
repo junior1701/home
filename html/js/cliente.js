@@ -1,16 +1,18 @@
 import { Validate } from "./Validate.js";
 import { Requests } from "./Requests.js";
 const Salvar = document.getElementById('insert');
+const Acao = document.getElementById('acao');
 
-$('#cpf').inputmask({ "mask": ["999.999.999-99", "99.999.999/9999-99"] });
-$('#tel').inputmask({ "mask": ["(99) 99999-9999"] });
+
+$('#cpf_cnpj').inputmask({ "mask": ["999.999.999-99", "99.999.999/9999-99"] });
+$('#celular').inputmask({ "mask": ["(99) 99999-9999"] });
+$('#whatsapp').inputmask({ "mask": ["(99) 99999-9999"] });
 
 Salvar.addEventListener('click', async () => {
     Validate.SetForm('form').Valid();
-    const response = await Requests.SetForm('form').Post('/cliente/insert');
-    console.log(response);
-     if (!response.status) {
-       Swal.fire({
+    const response = await (Acao.value === 'inserir' ? Requests.SetForm('form').Post('/cliente/insert') : Requests.SetForm('form').Post('/cliente/update'));
+    if (!response.status) {
+        Swal.fire({
             icon: 'error',
             title: 'Por favor, preencha todos os campos obrigatórios.',
             showConfirmButton: false,

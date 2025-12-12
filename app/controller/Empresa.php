@@ -21,45 +21,55 @@ class Empresa extends Base
     }
     public function insert($request, $response)
     {
-
         try {
-            $nome = $_POST['nome'];
-            $sobrenome = $_POST['sobrenome'];
-            $cpf = $_POST['cpf'];
-            $rg = $_POST['rg'];
-
-            $FieldsAndValues = [
-                'nome_fantasia' => $nome,
-                'razao_social' => $sobrenome,
-                'cnpj' => $cpf,
-                'ie' => $rg
+            #Captura os dados do form
+            $form = $request->getParsedBody();
+            #Capturar os dados do usuário.
+            $dadosEmpresa = [
+                'nome_fantasia' => $form['nome_fantasia'],
+                'razao_social' => $form['razao'],
+                'cnpj' => $form['cnpj'],
+                'ie' => $form['ie'],
+                'senha' => password_hash($form['senhaCadastro'], PASSWORD_DEFAULT)
             ];
-            if (is_null($nome) || $nome === '') {
-                echo json_encode(['status' => false, 'msg' => 'Por favor informe o nome!', 'id' => 0]);
-                die;
+            $IsInseted = InsertQuery::table('empresa')->save($dadosEmpresa);
+            if (!$IsInseted) {
+                return $this->SendJson(
+                    $response,
+                    ['status' => false, 'msg' => 'Restrição: ' . $IsInseted, 'id' => 0],
+                    403
+                );
             }
-            if (is_null($sobrenome) ||  $sobrenome === '') {
-                echo json_encode(['status' => false, 'msg' => 'Por favor informe o sobrenome!', 'id' => 0]);
-                die;
-            }
-            if (is_null($cpf) || $cpf === '') {
-                echo json_encode(['status' => false, 'msg' => 'Por favor informe o cpf!', 'id' => 0]);
-                die;
-            }
-            if (is_null($rg) || $rg === '') {
-                echo json_encode(['status' => false, 'msg' => 'Por favor informe o rg!', 'id' => 0]);
-                die;
-            }
-            $IsSave = InsertQuery::table('empresa')->save($FieldsAndValues);
-
-            if (!$IsSave) {
-                echo json_encode(['status' => false, 'msg' => $IsSave, 'id' => 0]);
-                die;
-            }
-            echo json_encode(['status' => true, 'msg' => 'Salvo com sucesso!', 'id' => 0]);
-            die;
-        } catch (\Throwable $th) {
-            //throw $th;
+            #Captura o código do ultimo usuário cadastrado na tabela de usuário
+            $id = SelectQuery::select('id')->from('empresa')->order('id', 'desc')->fetch();
+            #Colocamos o ID do ultimo usuário cadastrado na varaivel $id_usuario.
+            $id_empresa = $id['id'];
+            #Inserimos o e-mail
+            $dadosContato = [
+                'id_empresa' => $id_empresa,
+                'tipo' => 'email',
+                'contato' => $form['email']
+            ];
+            InsertQuery::table('contato')->save($dadosContato);
+            $dadosContato = [];
+            #Inserimos o celular
+            $dadosContato = [
+                'id_empresa' => $id_empresa,
+                'tipo' => 'celular',
+                'contato' => $form['celular']
+            ];
+            InsertQuery::table('contato')->save($dadosContato);
+            $dadosContato = [];
+            #Inserimos o WhastaApp
+            $dadosContato = [
+                'id_empresa' => $id_empresa,
+                'tipo' => 'whatsapp',
+                'contato' => $form['whatsapp']
+            ];
+            InsertQuery::table('contato')->save($dadosContato);
+            return $this->SendJson($response, ['status' => true, 'msg' => 'Cadastro realizado com sucesso!', 'id' => $id_empresa], 201);
+        } catch (\Exception $e) {
+            return $this->SendJson($response, ['status' => true, 'msg' => 'Restrição: ' . $e->getMessage(), 'id' => 0], 500);
         }
     }
     public function cadastro($request, $response)
@@ -98,7 +108,7 @@ class Empresa extends Base
         ];
 
         # Coluna escolhida
-        $orderField = $fields[$order];
+        $orderField = (intval($order) > 8) ? $fields[$order] : $fields[0];
 
         # Termo pesquisado
         $term = $form['search']['value'];
@@ -136,10 +146,11 @@ class Empresa extends Base
                 $value['nome_fantasia'],
                 $value['razao_social'],
                 $value['cnpj'],
+                $value['ie'],
                 $value['email'] ?? '',      // deixa em branco se NULL
                 $value['celular'] ?? '',    // deixa em branco se NULL
                 $value['whatsapp'] ?? '',   // deixa em branco se NULL
-                "<button class='btn btn-warning'>Editar</button>
+                "<a href='/empresa/alterar/{$value['id']}' class='btn btn-warning'>Editar</a>
          <button type='button' onclick='Delete(" . $value['id'] . ");' class='btn btn-danger'>Excluir</button>"
             ];
         }
@@ -159,6 +170,25 @@ class Empresa extends Base
 
         return $response
             ->withHeader('Content-Type', 'application/json')
+            ->withStatus(200);
+    }
+    public function alterar($request, $response, $args)
+    {
+        $id = $args['id'];
+        $empresa = SelectQuery::select()
+            ->from('vw_empresa_contatos')
+            ->where('id', '=', $id)
+            ->fetch();
+
+        $dadosTemplate = [
+            'titulo' => 'Alterar empresa',
+            'empresa' => $empresa,
+            'id' => $id,
+            'acao' => 'alterar'
+        ];
+        return $this->getTwig()
+            ->render($response, $this->setView('empresa'), $dadosTemplate)
+            ->withHeader('Content-Type', 'text/html')
             ->withStatus(200);
     }
     public function delete($request, $response)

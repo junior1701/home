@@ -5,6 +5,7 @@ namespace app\controller;
 use app\database\builder\SelectQuery;
 use app\database\builder\InsertQuery;
 use app\database\builder\DeleteQuery;
+use app\database\builder\UpdateQuery;
 
 class User extends Base
 {
@@ -73,7 +74,6 @@ class User extends Base
             return $this->SendJson($response, ['status' => true, 'msg' => 'Restrição: ' . $e->getMessage(), 'id' => 0], 500);
         }
     }
-
     public function cadastro($request, $response)
     {
         $dadosTemplate = [
@@ -103,13 +103,14 @@ class User extends Base
             1 => 'nome',
             2 => 'sobrenome',
             3 => 'cpf',
+            6 => 'rg',
             4 => 'email',
             5 => 'celular',
-            6 => 'whatsapp'
+            7 => 'whatsapp'
         ];
 
         # Coluna escolhida
-        $orderField = $fields[$order];
+        $orderField = (intval($order) > 8) ? $fields[$order] : $fields[0];
 
         # Termo pesquisado
         $term = $form['search']['value'];
@@ -146,15 +147,14 @@ class User extends Base
                 $value['nome'],
                 $value['sobrenome'],
                 $value['cpf'],
+                $value['rg'],
                 $value['email'] ?? '',      // deixa em branco se NULL
                 $value['celular'] ?? '',    // deixa em branco se NULL
                 $value['whatsapp'] ?? '',   // deixa em branco se NULL
-                "<button class='btn btn-warning'>Editar</button>
+                "<a href='/usuario/alterar/{$value['id']}' class='btn btn-warning'>Editar</a>
          <button type='button' onclick='Delete(" . $value['id'] . ");' class='btn btn-danger'>Excluir</button>"
             ];
         }
-
-
         # Resposta final
         $data = [
             'status' => true,
@@ -171,7 +171,25 @@ class User extends Base
             ->withHeader('Content-Type', 'application/json')
             ->withStatus(200);
     }
+    public function alterar($request, $response, $args)
+    {
+        $id = $args['id'];
+        $usuario = SelectQuery::select()
+            ->from('vw_usuario_contatos')
+            ->where('id', '=', $id)
+            ->fetch();
 
+        $dadosTemplate = [
+            'titulo' => 'Alterar usuario',
+            'usuario' => $usuario,
+            'id' => $id,
+            'acao' => 'alterar'
+        ];
+        return $this->getTwig()
+            ->render($response, $this->setView('user'), $dadosTemplate)
+            ->withHeader('Content-Type', 'text/html')
+            ->withStatus(200);
+    }
     public function delete($request, $response)
     {
         try {
@@ -189,6 +207,68 @@ class User extends Base
         } catch (\Throwable $th) {
             echo "Erro: " . $th->getMessage();
             die;
+        }
+    }
+    public function update($request, $response)
+    {
+        try {
+
+            $form = $request->getParsedBody();
+            $id = $form['id'];
+
+            // --- Atualiza usuário ---
+            $dadosUsuario = [
+                'nome'       => $form['nome'],
+                'sobrenome'  => $form['sobrenome'],
+                'cpf'        => $form['cpf'],
+                'rg'         => $form['rg']
+            ];
+
+            if (!empty($form['senhaCadastro'])) {
+                $dadosUsuario['senha'] = password_hash($form['senhaCadastro'], PASSWORD_DEFAULT);
+            }
+
+            UpdateQuery::table('usuario')
+                ->set($dadosUsuario)
+                ->where('id', '=', $id)
+                ->update();
+
+            // --- Atualiza contatos ---
+            $tipos = ['email', 'celular', 'whatsapp'];
+
+            foreach ($tipos as $tipo) {
+
+                $contato = SelectQuery::select('id')
+                    ->from('contato')
+                    ->where('id_usuario', '=', $id)
+                    ->where('tipo', '=', $tipo)
+                    ->fetch();
+
+                if ($contato) {
+                    UpdateQuery::table('contato')
+                        ->set(['contato' => $form[$tipo]])
+                        ->where('id', '=', $contato['id'])
+                        ->update();
+                } else {
+                    InsertQuery::table('contato')->save([
+                        'id_usuario' => $id,
+                        'tipo'       => $tipo,
+                        'contato'    => $form[$tipo]
+                    ]);
+                }
+            }
+
+            return $this->SendJson($response, [
+                'status' => true,
+                'msg' => 'Usuário atualizado com sucesso!',
+                'id' => $id
+            ], 200);
+        } catch (\Exception $e) {
+            return $this->SendJson($response, [
+                'status' => false,
+                'msg' => $e->getMessage(),
+                'id' => 0
+            ], 500);
         }
     }
 }

@@ -26,7 +26,7 @@ $app->group('/usuario', function (RouteCollectorProxy $group) {
     $group->post('/update', User::class . ':update');
     $group->post('/insert', User::class . ':insert');
     $group->post('/delete', User::class . ':delete');
-    $group->post('/listauser', User::class . ':listauser');
+    $group->post('/listuser', User::class . ':listuser');
 });
 $app->group('/cliente', function (RouteCollectorProxy $group) {
     $group->get('/lista', Cliente::class . ':lista')->add(Middleware::authentication());

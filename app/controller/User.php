@@ -84,18 +84,18 @@ class User extends Base
             ->withHeader('Content-Type', 'text/html')
             ->withStatus(200);
     }
-    public function listauser($request, $response)
+    public function listuser($request, $response)
     {
         # Captura todas as variáveis de forma segura
         $form = $request->getParsedBody();
 
         # Ordenação
-        $order = $form['order'][0]['column'];
-        $orderType = $form['order'][0]['dir'];
+        $order = $form['order'][0]['column'] ?? 0;
+        $orderType = $form['order'][0]['dir'] ?? 'asc';
 
         # Paginação
-        $start = $form['start'];
-        $length = $form['length'];
+        $start = $form['start'] ?? 0;
+        $length = $form['length'] ?? 10;
 
         # Mapeamento de colunas para ordenação
         $fields = [
@@ -116,7 +116,7 @@ class User extends Base
         $term = $form['search']['value'];
 
         # Agora a busca é feita na VIEW
-        $query = SelectQuery::select('*')->from('vw_usuario_contatos');
+        $query = SelectQuery::select()->from('vw_usuario_contatos');
 
         # Filtros de pesquisa
         if (!empty($term)) {
@@ -162,34 +162,9 @@ class User extends Base
             'recordsFiltered' => count($users),
             'data' => $userData
         ];
-
-        $payload = json_encode($data);
-
-        $response->getBody()->write($payload);
-
-        return $response
-            ->withHeader('Content-Type', 'application/json')
-            ->withStatus(200);
+        return $this->SendJson($response, $data);
     }
-    public function alterar($request, $response, $args)
-    {
-        $id = $args['id'];
-        $usuario = SelectQuery::select()
-            ->from('vw_usuario_contatos')
-            ->where('id', '=', $id)
-            ->fetch();
 
-        $dadosTemplate = [
-            'titulo' => 'Alterar usuario',
-            'usuario' => $usuario,
-            'id' => $id,
-            'acao' => 'alterar'
-        ];
-        return $this->getTwig()
-            ->render($response, $this->setView('user'), $dadosTemplate)
-            ->withHeader('Content-Type', 'text/html')
-            ->withStatus(200);
-    }
     public function delete($request, $response)
     {
         try {
@@ -209,66 +184,46 @@ class User extends Base
             die;
         }
     }
+    public function alterar($request, $response, $args)
+    {
+        try {
+            $id = $args['id'];
+            $user = SelectQuery::select()->from('vw_usuario_contatos')->where('id', '=', $id)->fetch();
+            $dadosTemplate = [
+                'acao' => 'e',
+                'id' => $id,
+                'titulo' => 'Cadastro e edição',
+                'user' => $user
+            ];
+            return $this->getTwig()
+                ->render($response, $this->setView('user'), $dadosTemplate)
+                ->withHeader('Content-Type', 'text/html')
+                ->withStatus(200);
+        } catch (\Exception $e) {
+            var_dump($e);
+        }
+    }
     public function update($request, $response)
     {
         try {
-
             $form = $request->getParsedBody();
             $id = $form['id'];
-
-            // --- Atualiza usuário ---
-            $dadosUsuario = [
-                'nome'       => $form['nome'],
-                'sobrenome'  => $form['sobrenome'],
-                'cpf'        => $form['cpf'],
-                'rg'         => $form['rg']
+            if (is_null($id) || empty($id)) {
+                return $this->SendJson($response, ['status' => false, 'msg' => 'Por favor informe o ID', 'id' => 0], 500);
+            }
+            $FieldAndValues = [
+                'nome' => $form['nome'],
+                'sobrenome' => $form['sobrenome'],
+                'cpf' => $form['cpf'],
+                'rg' => $form['rg']
             ];
-
-            if (!empty($form['senhaCadastro'])) {
-                $dadosUsuario['senha'] = password_hash($form['senhaCadastro'], PASSWORD_DEFAULT);
+            $IsUpdate = UpdateQuery::table('usuario')->set($FieldAndValues)->where('id', '=', $id)->update();
+            if (!$IsUpdate) {
+                return $this->SendJson($response, ['status' => false, 'msg' => 'Restrição: ' . $IsUpdate, 'id' => 0], 403);
             }
-
-            UpdateQuery::table('usuario')
-                ->set($dadosUsuario)
-                ->where('id', '=', $id)
-                ->update();
-
-            // --- Atualiza contatos ---
-            $tipos = ['email', 'celular', 'whatsapp'];
-
-            foreach ($tipos as $tipo) {
-
-                $contato = SelectQuery::select('id')
-                    ->from('contato')
-                    ->where('id_usuario', '=', $id)
-                    ->where('tipo', '=', $tipo)
-                    ->fetch();
-
-                if ($contato) {
-                    UpdateQuery::table('contato')
-                        ->set(['contato' => $form[$tipo]])
-                        ->where('id', '=', $contato['id'])
-                        ->update();
-                } else {
-                    InsertQuery::table('contato')->save([
-                        'id_usuario' => $id,
-                        'tipo'       => $tipo,
-                        'contato'    => $form[$tipo]
-                    ]);
-                }
-            }
-
-            return $this->SendJson($response, [
-                'status' => true,
-                'msg' => 'Usuário atualizado com sucesso!',
-                'id' => $id
-            ], 200);
+            return $this->SendJson($response, ['status' => true, 'msg' => 'Atualizado com sucesso!', 'id' => $id]);
         } catch (\Exception $e) {
-            return $this->SendJson($response, [
-                'status' => false,
-                'msg' => $e->getMessage(),
-                'id' => 0
-            ], 500);
+            return $this->SendJson($response, ['status' => false, 'msg' => 'Restrição: ' . $e->getMessage(), 'id' => 0], 500);
         }
     }
 }

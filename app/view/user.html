@@ -5,7 +5,8 @@
     <!-- <h1 class="mb-4"><i class="fa-solid fa-user-plus"></i> Cadastro de Usuário</h1> -->
 
     <form id="form">
-        <input type="text" name="acao" id="acao" value="{{acao}}">
+        <input type="text" id="acao" name="acao" value="{{acao}}">
+        <input type="text" id="id" name="id" value="{{id}}">
         <ul class="nav nav-tabs mt-3" id="myTab" role="tablist">
             <li class="nav-item" role="presentation">
                 <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#perfil"
@@ -32,15 +33,16 @@
                     <div class="col-md-6 mt-3">
                         <div class="form-floating mb-3">
                             <input type="text" class="form-control fs" id="nome" name="nome" placeholder="Nome" required
-                                value="{{usuario.nome}}">
+                                value="{{user.nome}}" autofocus>
                             <label for="nome"><i class="fa-solid fa-user"></i> Nome</label>
                         </div>
                     </div>
+                    
 
                     <div class="col-md-6 mt-3">
                         <div class="form-floating mb-3">
                             <input type="text" class="form-control fs" id="sobrenome" name="sobrenome"
-                                placeholder="Sobrenome" required value="{{usuario.sobrenome}}">
+                                placeholder="Sobrenome" required value="{{user.sobrenome}}">
                             <label for="sobrenome"><i class="fa-solid fa-user"></i> Sobrenome</label>
                         </div>
                     </div>
@@ -48,7 +50,7 @@
                     <div class="col-md-6 mt-3">
                         <div class="form-floating mb-3">
                             <input type="text" class="form-control fs" id="cpf" name="cpf" placeholder="CPF" required
-                                value="{{usuario.cpf}}">
+                                value="{{user.cpf}}">
                             <label for="cpf"><i class="fa-solid fa-id-card"></i> CPF</label>
                         </div>
                     </div>
@@ -56,7 +58,7 @@
                     <div class="col-md-6 mt-3">
                         <div class="form-floating mb-3">
                             <input type="text" class="form-control fs" id="celular" name="celular"
-                                placeholder="Telefone" required value="{{usuario.celular}}">
+                                placeholder="Telefone" required value="{{user.celular}}">
                             <label for="celular"><i class="fa-solid fa-phone"></i> Telefone</label>
                         </div>
                     </div>
@@ -64,7 +66,7 @@
                     <div class="col-md-6 mt-3">
                         <div class="form-floating mb-3">
                             <input type="text" class="form-control fs" id="whatsapp" name="whatsapp"
-                                placeholder="Whatsapp" required value="{{usuario.whatsapp}}">
+                                placeholder="Whatsapp" required value="{{user.whatsapp}}">
                             <label for="whatsapp"><i class="fa-brands fa-whatsapp"></i> Whatsapp</label>
                         </div>
                     </div>
@@ -72,7 +74,7 @@
                     <div class="col-md-6 mt-3">
                         <div class="form-floating mb-3">
                             <input type="email" class="form-control fs" id="email" name="email" placeholder="Email"
-                                required value="{{usuario.email}}">
+                                required value="{{user.email}}">
                             <label for="email"><i class="fa-solid fa-envelope"></i> Email</label>
                         </div>
                     </div>
@@ -80,7 +82,7 @@
                     <div class="col-md-6 mt-3">
                         <div class="form-floating mb-3">
                             <input type="text" class="form-control fs" id="rg" name="rg" placeholder="RG" required
-                                value="{{usuario.rg}}">
+                                value="{{user.rg}}">
                             <label for="rg"><i class="fa-solid fa-id-card"></i> RG</label>
                         </div>
                     </div>
@@ -97,7 +99,7 @@
                         <div class="form-floating mb-3">
                             <label for="data_nascimento"><i class="fa-solid fa-calendar"></i> Data de nascimento</label>
                             <input type="date" class="form-control fs" id="data_nascimento" name="data_nascimento"
-                                placeholder="Data de nascimento" required value="{{usuario.data_nascimento}}">
+                                placeholder="Data de nascimento" required value="{{user.data_nascimento}}">
                         </div>
                     </div>
 
@@ -121,7 +123,7 @@
                     <a href="/usuario/lista" class="btn btn-danger me-2">
                         <i class="fa-solid fa-ban"></i> Cancelar
                     </a>
-                    <button class="btn btn-success" type="button" id="insert">
+                    <button class="btn btn-success" type="button" id="insertButton">
                         <i class="fa-solid fa-floppy-disk">
                         </i>Salvar</button>
                 </div>

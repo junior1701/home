@@ -5,6 +5,7 @@ namespace app\controller;
 use app\database\builder\SelectQuery;
 use app\database\builder\InsertQuery;
 use app\database\builder\DeleteQuery;
+use app\database\builder\UpdateQuery;
 
 class Empresa extends Base
 {
@@ -190,6 +191,33 @@ class Empresa extends Base
             ->render($response, $this->setView('empresa'), $dadosTemplate)
             ->withHeader('Content-Type', 'text/html')
             ->withStatus(200);
+    }
+    public function update($request, $response)
+    {
+        try {
+            $form = $request->getParsedBody();
+            $id = $form['id'];
+            if (is_null($id) || empty($id)) {
+                return $this->SendJson($response, ['status' => false, 'msg' => 'Por favor informe o ID', 'id' => 0], 500);
+            }
+            
+            $FieldAndValues = [
+                'nome_fantasia' => $form['nome_fantasia'],
+                'razao_social' => $form['razao'],
+                'cnpj' => $form['cnpj'],
+                'ie' => $form['ie'],
+                //'data_nascimento' => $form['data_nascimento']
+            ];
+            
+            $IsUpdate = UpdateQuery::table('empresa')->set($FieldAndValues)->where('id', '=', $id)->update();
+
+            if (!$IsUpdate) {
+                return $this->SendJson($response, ['status' => false, 'msg' => 'Restrição: ' . $IsUpdate, 'id' => 0], 403);
+            }
+            return $this->SendJson($response, ['status' => true, 'msg' => 'Atualizado com sucesso!', 'id' => $id]);
+        } catch (\Exception $e) {
+            return $this->SendJson($response, ['status' => false, 'msg' => 'Restrição: ' . $e->getMessage(), 'id' => 0], 500);
+        }
     }
     public function delete($request, $response)
     {

@@ -196,16 +196,16 @@ class Fornecedor extends Base
             die;
         }
     }
-     public function alterar($request, $response, $args)
+    public function alterar($request, $response, $args)
     {
         try {
             $id = $args['id'];
-            $user = SelectQuery::select()->from('vw_fornecedor_contatos')->where('id', '=', $id)->fetch();
+            $suplier = SelectQuery::select()->from('vw_fornecedor_contatos')->where('id', '=', $id)->fetch();
             $dadosTemplate = [
                 'acao' => 'e',
                 'id' => $id,
                 'titulo' => 'Cadastro e edição',
-                'user' => $user
+                'fornecedor' => $suplier
             ];
             return $this->getTwig()
                 ->render($response, $this->setView('fornecedor'), $dadosTemplate)
@@ -228,7 +228,7 @@ class Fornecedor extends Base
                 'sobrenome_razao' => $form['sobrenome_razao'],
                 'cpf_cnpj' => $form['cpf_cnpj'],
                 'rg_ie' => $form['rg_ie'],
-                'data_nascimento' => $form['data_nascimento']
+                //'data_nascimento' => $form['data_nascimento']
             ];
             $IsUpdate = UpdateQuery::table('fornecedor')->set($FieldAndValues)->where('id', '=', $id)->update();
             if (!$IsUpdate) {
@@ -240,4 +240,3 @@ class Fornecedor extends Base
         }
     }
 }
-

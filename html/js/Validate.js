@@ -1,5 +1,5 @@
 class Validate {
-    static form;
+    static form; 
     static SetForm(id) {
         // checa dependências
         if (typeof jQuery === 'undefined') {

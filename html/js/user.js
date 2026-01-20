@@ -1,4 +1,4 @@
-import { Validate } from "./Validate.js";
+import { Validate } from "./Validate1.js";
 import { Requests } from "./Requests.js";
 
 const InsertButton = document.getElementById('insertButton');

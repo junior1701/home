@@ -77,6 +77,7 @@ class Cliente extends Base
     public function cadastro($request, $response)
     {
         $dadosTemplate = [
+            'acao' => 'c',
             'titulo' => 'Cadastro de Cliente'
         ];
         return $this->getTwig()
@@ -191,7 +192,7 @@ class Cliente extends Base
             ->withHeader('Content-Type', 'text/html')
             ->withStatus(200);
     }
-        public function update($request, $response)
+    public function update($request, $response)
     {
         try {
             $form = $request->getParsedBody();
@@ -234,6 +235,3 @@ class Cliente extends Base
         }
     }
 }
-
-
-

@@ -77,6 +77,7 @@ class Fornecedor extends Base
     public function cadastro($request, $response)
     {
         $dadosTemplate = [
+            'acao' => 'c',
             'titulo' => 'Cadastro de fornecedor'
         ];
         return $this->getTwig()

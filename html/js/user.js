@@ -6,12 +6,12 @@ const FieldPassword = document.getElementById('campo_senha');
 const Action = document.getElementById('acao');
 
 $('#cpf').inputmask({ "mask": ["999.999.999-99", "99.999.999/9999-99"] });
-$('#celular').inputmask({ "mask": ["(99) 9999-0000"] });
-$('#whatsapp').inputmask({ "mask": ["(99) 0000-0000"] });
+$('#celular').inputmask({ "mask": ["(99) 9999-9999"] });
+$('#whatsapp').inputmask({ "mask": ["(99) 9999-9999"] });
 
 async function insert() {
     //Valida todos os campos do formulário
-    /*const IsValid = Validate
+    const IsValid = Validate
         .SetForm('form')//Inform o ID do form
         .Validate();//Aplica a validação no campos 
     if (!IsValid) {
@@ -27,7 +27,7 @@ async function insert() {
         });
         //Em caso de erro encerramos o processo.
         return;
-    }*/
+    }
     const response = await Requests.SetForm('form').Post('/usuario/insert');
     if (!response.status) {
         Swal.fire({
@@ -59,7 +59,7 @@ async function insert() {
     });
 }
 async function update() {
-    /*//Valida todos os campos do formulário
+    //Valida todos os campos do formulário
     const IsValid = Validate
         .SetForm('form')//Inform o ID do form
         .Validate();//Aplica a validação no campos 
@@ -76,7 +76,7 @@ async function update() {
         });
         //Em caso de erro encerramos o processo.
         return;
-    }*/
+    }
     const response = await Requests.SetForm('form').Post('/usuario/update');
     if (!response.status) {
         Swal.fire({

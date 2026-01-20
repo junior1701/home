@@ -76,6 +76,7 @@ class Empresa extends Base
     public function cadastro($request, $response)
     {
         $dadosTemplate = [
+            'acao' => 'c',
             'titulo' => 'Cadastro de empresa'
         ];
         return $this->getTwig()

@@ -77,6 +77,7 @@ class User extends Base
     public function cadastro($request, $response)
     {
         $dadosTemplate = [
+            'acao' => 'c',
             'titulo' => 'Cadastro de usuário'
         ];
         return $this->getTwig()

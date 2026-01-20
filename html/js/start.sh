@@ -209,6 +209,6 @@ criar_tabelas() {
     GROUP BY u.id, u.nome, u.sobrenome, u.cpf, u.rg, u.data_cadastro, u.data_alteracao;
     "
 }
-
+  
 configurar_postgresql
 criar_tabelas

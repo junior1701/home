@@ -74,7 +74,7 @@
                     <div class="col-md-6 mt-3">
                         <div class="form-floating mb-3">
                             <input type="email" class="form-control fs" id="email" name="email" placeholder="Email"
-                                required value="{{contato.email}}">
+                                required value="{{cliente.email}}">
                             <label for="email"><i class="fa-solid fa-envelope"></i> Email</label>
                         </div>
                     </div>
@@ -99,14 +99,14 @@
                     <div class="col-md-6 mt-3">
                         <div class="form-floating mb-3">
                             <input type="date" class="form-control fs" id="data_nascimento" name="data_nascimento"
-                                placeholder="Data de nascimento" required>
+                                placeholder="Data de nascimento" required value="{{cliente.data_nascimento}}">
                         </div>
                     </div>
 
                     <div class="col-md-6 mt-3">
                         <div class="form-check mb-3">
                             <input class="form-check-input" type="checkbox" id="status" name="status" >
-                            <label class="form-check-label" for="status">Ativo?</label>
+                            <label class="form-check-label" for="status" >Ativo?</label>
                         </div>
                     </div>
                 </div>
